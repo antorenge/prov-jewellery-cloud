@@ -1,0 +1,4 @@
+{% load thumbnail %} {% load admin_static %} {% thumbnail picture '100x100' format="PNG" as im %}
+<img src="{{ im.url }}" alt="" style="width: 56px; height: 56px;" class="img-rounded img-responsive"> {% empty %}
+<p>No image</p>
+{% endthumbnail %}
