@@ -29,14 +29,11 @@ class Product(models.Model):
     modified_by = LastUserField(
         related_name='modified_by_%(app_label)s_%(class)s',
         on_delete=models.PROTECT)
-
     components = models.ManyToManyField('self', through='Component',
                                         symmetrical=False,
                                         related_name='product_components')
-
     bill_of_materials = models.ManyToManyField('Material',
                                                through='BillOfMaterial')
-
     designers = models.ManyToManyField(User)
 
     def __str__(self):
@@ -47,8 +44,8 @@ class Product(models.Model):
         if not self.sku:
             product_model = apps.get_model('products', 'Product')
             count = product_model.objects.count()
-            self.sku = str(str(self.variance) + str(self.year)[:-2] +
-                           str(self.color) + str(self.size) +
+            self.sku = str(str(self.variance)[:2] + str(self.year)[-2:] +
+                           str(self.color)[:3] + str(self.size)[:4] +
                            str(count + 1)).upper()
 
         super(Product, self).save(* args, ** kwargs)
