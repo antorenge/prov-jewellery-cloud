@@ -62,6 +62,10 @@ class ProductAdmin(admin.ModelAdmin):
             'fields': ('name', 'collection', 'category', 'variance', 'year',
                        'color', 'size', 'shape')
         }),
+        ('Designers', {
+            'classes': ('collapse',),
+            'fields': ('designers',),
+        }),
     )
 
     inlines = (
