@@ -1,0 +1,4 @@
+{% load thumbnail %} {% thumbnail image '100x100' crop="top" format="PNG" as im %}
+<img src="{{ im.url }}" alt="product image" style="width: 100px; height: 100px;" class="img-rounded"> {% empty %}
+<p>Missing product image</p>
+{% endthumbnail %}
