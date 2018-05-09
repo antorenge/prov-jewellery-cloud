@@ -41,10 +41,13 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'rest_framework_swagger',
+    'djmoney',
     'sorl.thumbnail',
     'apps.shared.audit_log',
     'apps.products',
     'apps.users',
+    'apps.purchases',
+    'apps.inventory',
 ]
 
 MIDDLEWARE = [
