@@ -1,0 +1,48 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+*.pyc
+
+# Distribution / packaging
+.Python
+build/
+
+# Translations
+*.mo
+*.pot
+
+# Environment variables
+.env
+
+# IDE files
+.vscode
+
+# Images
+media/*
+
+# Static files
+static/*
+
+# Log files
+*.log
+
+# Django temp files
+tempfiles/
+
+# Ignore Migrations (Disabled on production only)
+*/migrations/*.py
+*/migrations/*.pyc
+*/*/migrations/*.py
+*/*/migrations/*.pyc
+*/*/*/migrations/*.py
+*/*/*/migrations/*.pyc
+
+# Tests / Coverage reports
+htmlcov/
+.tox/
+.coverage
+.coverage.*
+.cache/
+coverage.*
+.pytest_cache/
