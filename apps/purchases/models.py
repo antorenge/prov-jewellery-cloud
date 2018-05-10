@@ -2,8 +2,10 @@
 Purchases models
 """
 from djmoney.models.fields import MoneyField
+from moneyed import Money, EUR
 from django.db import models
 from django.apps import apps
+from django.db.models import Q, Sum, F
 from django.core.validators import MinValueValidator
 from apps.shared.audit_log.models.fields import CreatingUserField
 from apps.shared.audit_log.models.fields import LastUserField
@@ -30,6 +32,19 @@ class PurchaseOrder(models.Model):
         if not self.code:
             self.code = get_unique_code()
         super(PurchaseOrder, self).save(* args, ** kwargs)
+
+    def po_products(self):
+        """Return list of products in a purchase order."""
+        return self.purchaseorderproduct_set.all()
+
+    def order_value(self):
+        total_value = Money(0, EUR)
+        tv_products = self.po_products().aggregate(
+            total=Sum(F('quantity_ordered') * F('unit_price'),
+                      output_field=MoneyField()))
+        total_value = Money(tv_products['total'], EUR) if tv_products['total']\
+            else Money(0, EUR)
+        return total_value
 
 
 class PurchaseOrderProduct(models.Model):
