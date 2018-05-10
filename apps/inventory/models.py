@@ -10,6 +10,8 @@ class InventoryItem(models.Model):
     product = models.ForeignKey(Product, on_delete=models.PROTECT)
     delivery = models.ForeignKey(PurchaseOrderDelivery,
                                  on_delete=models.PROTECT)
+    wip = models.ForeignKey('validations.WorkInProgress',
+                            on_delete=models.PROTECT, blank=True, null=True)
 
     def __str__(self):
         return "{} ({})".format(self.product, self.serial_no)
