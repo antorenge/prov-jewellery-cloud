@@ -2,7 +2,9 @@
 Payments app
 """
 from djmoney.models.fields import MoneyField
+from moneyed import Money, EUR
 from django.db import models
+from django.db.models import Q, Sum, F
 from apps.shared.helpers import get_unique_code
 from apps.shared.audit_log.models.fields import CreatingUserField
 from apps.shared.audit_log.models.fields import LastUserField
@@ -16,6 +18,8 @@ class Invoice(models.Model):
     code = models.CharField(unique=True, primary_key=True,
                             db_index=True, max_length=64, blank=True)
     order = models.ForeignKey(PurchaseOrder, on_delete=models.PROTECT)
+    amount = MoneyField(max_digits=10, decimal_places=2,
+                        default_currency='EUR', blank=True)
     due_date = models.DateTimeField()
 
     def __str__(self):
@@ -32,11 +36,15 @@ class Invoice(models.Model):
 
     @property
     def amount_due(self):
-        return
+        return self.amount - self.amount_paid
 
     @property
     def amount_paid(self):
-        return
+        total_paid = Money(0, EUR)
+        payments = self.payments.aggregate(total=Sum(F('amount')))
+        if payments['total']:
+            total_paid = Money(payments['total'], EUR)
+        return total_paid
 
 
 class Payment(models.Model):
