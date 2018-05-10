@@ -6,7 +6,13 @@ from .models import Invoice, Payment, OwnershipTransfer
 
 
 class InvoiceAdmin(admin.ModelAdmin):
-    list_display = ('code', 'order', 'amount_due', 'due_date')
+    list_display = ('code', 'order', 'amount', 'amount_due', 'due_date')
+
+    fieldsets = (
+        (None, {
+            'fields': ('order', 'amount', 'due_date')
+        }),
+    )
 
 
 class PaymentAdmin(admin.ModelAdmin):
