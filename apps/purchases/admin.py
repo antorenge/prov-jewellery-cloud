@@ -18,7 +18,7 @@ class PurchaseOrderProductInline(admin.StackedInline):
 
 class PurchaseOrderAdmin(admin.ModelAdmin):
     """Purchase order admin view"""
-    list_display = ('code', 'name', 'workshop', 'due_date')
+    list_display = ('code', 'name', 'workshop', 'due_date', 'order_value')
 
     fieldsets = (
         (None, {
