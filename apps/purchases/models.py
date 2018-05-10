@@ -20,7 +20,7 @@ class PurchaseOrder(models.Model):
     workshop = models.ForeignKey('Workshop', on_delete=models.PROTECT)
     products = models.ManyToManyField(Product, through='PurchaseOrderProduct')
     date_created = models.DateTimeField(auto_now=False, auto_now_add=True)
-    date_modified = models.DateTimeField(auto_now=True)
+    due_date = models.DateTimeField()
     artisans = models.ManyToManyField(User)
 
     def __str__(self):
@@ -35,7 +35,7 @@ class PurchaseOrder(models.Model):
 class PurchaseOrderProduct(models.Model):
     """Model for products ordered in a purchase order"""
     order = models.ForeignKey(PurchaseOrder, on_delete=models.CASCADE)
-    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    product = models.ForeignKey(Product, on_delete=models.PROTECT)
     quantity_ordered = models.FloatField(
         validators=[MinValueValidator(0.00), ], default=0.00)
     unit_price = MoneyField(max_digits=10, decimal_places=2,
@@ -54,10 +54,57 @@ class PurchaseOrderDelivery(models.Model):
     quantity_received = models.FloatField(
         validators=[MinValueValidator(0.00), ], default=0.00)
     date_delivered = models.DateTimeField()
-    date_received = models.DateTimeField()
+    date_received = models.DateTimeField(blank=True, null=True)
+    delivered_by = models.ForeignKey(
+        User, on_delete=models.PROTECT,
+        related_name='delivered_by_%(app_label)s_%(class)s')
+    received_by = models.ForeignKey(
+        User, on_delete=models.PROTECT,
+        related_name='received_by_%(app_label)s_%(class)s',
+        blank=True, null=True)
+
+    class Meta:
+        verbose_name = "Purchase order delivery"
+        verbose_name_plural = "Purchase order deliveries"
 
     def __str__(self):
-        return "{} ({})".format(self.product, self.quantity_delivered)
+        return "{} ({})".format(self.po_product, self.quantity_delivered)
+
+    def save(self, * args, ** kwargs):
+        super(PurchaseOrderDelivery, self).save(* args, ** kwargs)
+        # Update inventory items
+        self.update_inventory_items()
+
+    @property
+    def items(self):
+        """Return list of items at a granular level delivered by an artisan"""
+        inventory = apps.get_model('inventory', 'InventoryItem')
+        return inventory.objects.filter(delivery=self)
+
+    def update_inventory_items(self):
+        """Updates inventory items as per the quantity delivered"""
+        inventory = apps.get_model('inventory', 'InventoryItem')
+        existing_items = self.items
+        qty_delivered = int(self.quantity_delivered)
+
+        if not existing_items:
+            for i in range(0, qty_delivered):
+                new_serial_no = str(str(self.po_product.order.code) +
+                                    str(self.po_product.id) + str(self.pk) +
+                                    str(i+1).zfill(3)).lower()
+                inventory.objects.create(serial_no=new_serial_no,
+                                         delivery=self,
+                                         product=self.po_product.product)
+        else:
+            count = existing_items.count()
+            if count != qty_delivered:
+                for i in range(count, qty_delivered):
+                    new_serial_no = str(str(self.po_product.order.code) +
+                                        str(self.po_product.id) +
+                                        str(self.pk) + str(i+1).zfill(3)).lower()
+                    inventory.objects.create(serial_no=new_serial_no,
+                                             delivery=self,
+                                             product=self.po_product.product)
 
 
 class Workshop(models.Model):
@@ -72,10 +119,8 @@ class Workshop(models.Model):
 class Location(models.Model):
     """Geo location address"""
     name = models.CharField(max_length=160, blank=True)
-    latitude = models.FloatField(
-        validators=[MinValueValidator(0.00), ], default=0.00)
-    longitude = models.FloatField(
-        validators=[MinValueValidator(0.00), ], default=0.00)
+    latitude = models.FloatField(default=0.00)
+    longitude = models.FloatField(default=0.00)
 
     def __str__(self):
         return "{}".format(self.name)
@@ -99,12 +144,6 @@ class ArtisanProduction(models.Model):
 
     def __str__(self):
         return "{} ({})".format(self.po_product, self.quantity_produced)
-
-    @property
-    def items(self):
-        """Return list of items at a granular level delivered by an artisan"""
-        inventory = apps.get_model('inventory', 'InventoryItem')
-        return inventory.objects.filter(production=self)
 
 
 class Supplier(models.Model):
