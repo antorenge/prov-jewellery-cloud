@@ -10,7 +10,7 @@ from django.core.validators import MinValueValidator
 from apps.shared.audit_log.models.fields import CreatingUserField
 from apps.shared.audit_log.models.fields import LastUserField
 from apps.shared.helpers import get_unique_code
-from apps.products.models import Product, Material
+from apps.products.models import ProductDesign, Material
 from apps.users.models import User
 
 
@@ -20,7 +20,8 @@ class PurchaseOrder(models.Model):
                             db_index=True, max_length=64, blank=True)
     name = models.CharField(max_length=160, blank=True)
     workshop = models.ForeignKey('Workshop', on_delete=models.PROTECT)
-    products = models.ManyToManyField(Product, through='PurchaseOrderProduct')
+    products = models.ManyToManyField(
+        ProductDesign, through='PurchaseOrderProduct')
     date_created = models.DateTimeField(auto_now=False, auto_now_add=True)
     due_date = models.DateTimeField()
     artisans = models.ManyToManyField(User)
@@ -50,7 +51,7 @@ class PurchaseOrder(models.Model):
 class PurchaseOrderProduct(models.Model):
     """Model for products ordered in a purchase order"""
     order = models.ForeignKey(PurchaseOrder, on_delete=models.CASCADE)
-    product = models.ForeignKey(Product, on_delete=models.PROTECT)
+    product = models.ForeignKey(ProductDesign, on_delete=models.PROTECT)
     quantity_ordered = models.FloatField(
         validators=[MinValueValidator(0.00), ], default=0.00)
     unit_price = MoneyField(max_digits=10, decimal_places=2,

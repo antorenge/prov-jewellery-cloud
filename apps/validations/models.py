@@ -7,7 +7,7 @@ from apps.shared.audit_log.models.fields import CreatingUserField
 from apps.shared.audit_log.models.fields import LastUserField
 from apps.inventory.models import InventoryItem
 from apps.users.models import User
-from apps.purchases.models import Workshop, Product
+from apps.purchases.models import Workshop, ProductDesign
 
 
 class Validation(models.Model):
@@ -44,7 +44,7 @@ class WorkInProgress(models.Model):
         ('modification', 'Modification'),
         ('assembly', 'Assembly'),
     )
-    product = models.ForeignKey(Product, on_delete=models.PROTECT)
+    product = models.ForeignKey(ProductDesign, on_delete=models.PROTECT)
     workshop = models.ForeignKey(Workshop, on_delete=models.PROTECT)
     process = models.CharField(choices=PROCESS,
                                default='artisan_production', max_length=160)

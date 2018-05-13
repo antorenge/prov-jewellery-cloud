@@ -1,9 +1,9 @@
 """
-Model admin views for Product
+Model admin views for ProductDesign
 """
 from django.contrib import admin
 from django.template.loader import render_to_string
-from .models import (Product, Component, Image, Drawing, Dimension,
+from .models import (ProductDesign, Component, Image, Drawing, Dimension,
                      Material, Technique, BillOfMaterial, MaterialTechnique)
 
 
@@ -52,7 +52,7 @@ class BillOfMaterialInline(admin.StackedInline):
     verbose_name_plural = ''
 
 
-class ProductAdmin(admin.ModelAdmin):
+class ProductDesignAdmin(admin.ModelAdmin):
     """Admin view for products"""
     list_display = ('sku', 'name', 'product_image', 'collection', 'category',
                     'year', 'color', 'size')
@@ -114,4 +114,4 @@ class TechniqueAdmin(admin.ModelAdmin):
 
 admin.site.register(Technique, TechniqueAdmin)
 admin.site.register(Material, MaterialAdmin)
-admin.site.register(Product, ProductAdmin)
+admin.site.register(ProductDesign, ProductDesignAdmin)

@@ -1,5 +1,5 @@
 from django.db import models
-from apps.products.models import Product
+from apps.products.models import ProductDesign
 from apps.purchases.models import PurchaseOrderDelivery
 
 
@@ -7,7 +7,7 @@ class InventoryItem(models.Model):
     """Uniquely tracks each item delivered by an artisan"""
     serial_no = models.CharField(unique=True, primary_key=True,
                                  db_index=True, max_length=128, blank=True)
-    product = models.ForeignKey(Product, on_delete=models.PROTECT)
+    product = models.ForeignKey(ProductDesign, on_delete=models.PROTECT)
     delivery = models.ForeignKey(PurchaseOrderDelivery,
                                  on_delete=models.PROTECT)
     wip = models.ForeignKey('validations.WorkInProgress',

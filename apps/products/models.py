@@ -9,8 +9,11 @@ from apps.shared.audit_log.models.fields import LastUserField
 from apps.users.models import User
 
 
-class Product(models.Model):
-    """Products"""
+class ProductDesign(models.Model):
+    """Product design
+
+    Details a products design and specifications.
+    """
     sku = models.CharField(unique=True, verbose_name='SKU', primary_key=True,
                            db_index=True, max_length=64, blank=True)
     name = models.CharField(max_length=160, blank=True)
@@ -42,13 +45,13 @@ class Product(models.Model):
     def save(self, * args, ** kwargs):
 
         if not self.sku:
-            product_model = apps.get_model('products', 'Product')
+            product_model = apps.get_model('products', 'ProductDesign')
             count = product_model.objects.count()
             self.sku = str(str(self.variance)[:2] + str(self.year)[-2:] +
                            str(self.color)[:3] + str(self.size)[:4] +
                            str(count + 1)).upper()
 
-        super(Product, self).save(* args, ** kwargs)
+        super(ProductDesign, self).save(* args, ** kwargs)
 
     @property
     def default_image(self):
@@ -58,10 +61,10 @@ class Product(models.Model):
 
 
 class Component(models.Model):
-    """Product components"""
-    parent = models.ForeignKey(Product, on_delete=models.PROTECT,
+    """Product design components"""
+    parent = models.ForeignKey(ProductDesign, on_delete=models.PROTECT,
                                related_name='parent_product')
-    child = models.ForeignKey(Product, on_delete=models.PROTECT,
+    child = models.ForeignKey(ProductDesign, on_delete=models.PROTECT,
                               related_name='child_product')
     quantity = models.FloatField(validators=[MinValueValidator(0.00), ],
                                  default=0.00)
@@ -71,8 +74,9 @@ class Component(models.Model):
 
 
 class Drawing(models.Model):
-    """Product drawings"""
-    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    """Product design drawings"""
+    product = models.ForeignKey(
+        ProductDesign, related_name='drawings', on_delete=models.CASCADE)
     file = models.ImageField(
         upload_to='images/products/%Y/%m',
         default='images/products/None/no-img.png')
@@ -80,8 +84,9 @@ class Drawing(models.Model):
 
 
 class Image(models.Model):
-    """Product images"""
-    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    """Product design images"""
+    product = models.ForeignKey(
+        ProductDesign, related_name='images', on_delete=models.CASCADE)
     file = models.ImageField(
         upload_to='images/products/%Y/%m',
         default='images/products/None/no-img.png')
@@ -89,8 +94,8 @@ class Image(models.Model):
 
 
 class Dimension(models.Model):
-    """Product dimensions and specifications"""
-    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    """Product design dimensions and specifications"""
+    product = models.ForeignKey(ProductDesign, on_delete=models.CASCADE)
     attribute = models.CharField(blank=True, max_length=160)
     measurement = models.CharField(max_length=160, blank=True)
 
@@ -118,8 +123,8 @@ class Material(models.Model):
 
 
 class BillOfMaterial(models.Model):
-    """Product bill of materials"""
-    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    """Product design bill of materials"""
+    product = models.ForeignKey(ProductDesign, on_delete=models.CASCADE)
     material = models.ForeignKey(Material, on_delete=models.CASCADE)
     quantity = models.FloatField(validators=[MinValueValidator(0.00), ],
                                  default=0.00)
