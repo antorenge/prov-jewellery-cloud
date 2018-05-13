@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'rest_framework_swagger',
     'djmoney',
+    'django_filters',
     'sorl.thumbnail',
     'apps.shared.audit_log',
     'apps.products',
