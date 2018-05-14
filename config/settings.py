@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'djmoney',
     'django_filters',
     'sorl.thumbnail',
+    'corsheaders',
     'apps.shared.audit_log',
     'apps.products',
     'apps.users',
@@ -56,6 +57,7 @@ INSTALLED_APPS = [
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -168,3 +170,10 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
 # URL that handles the media served from MEDIA_ROOT. Make sure to use a
 # trailing slash.
 MEDIA_URL = '/media/'
+
+REST_FRAMEWORK = {
+    'DEFAULT_FILTER_BACKENDS': ('django_filters.rest_framework.DjangoFilterBackend',)
+}
+
+# Enable CORS
+CORS_ORIGIN_ALLOW_ALL = True
