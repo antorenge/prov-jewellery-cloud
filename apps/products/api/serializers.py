@@ -94,3 +94,9 @@ class ComponentSerializer(serializers.ModelSerializer):
     class Meta:
         model = Component
         fields = "__all__"
+
+
+class ValidateSerializer(serializers.Serializer):
+    """Validate JSON web tokens serializer"""
+    sku = serializers.CharField(max_length=200)
+    token = serializers.CharField()
