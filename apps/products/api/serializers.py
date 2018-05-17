@@ -4,21 +4,31 @@ Product Design API
 from rest_framework import serializers
 from apps.users.api.serializers import UserSerializer
 from ..models import (Image, Drawing, ProductDesign, Material, BillOfMaterial,
-                      Component, Technique)
+                      Component, Technique, Dimension)
+
+
+class DimensionSerializer(serializers.ModelSerializer):
+    """Serializer for dimensions"""
+
+    class Meta:
+        model = Dimension
+        fields = ('attribute', 'measurement')
 
 
 class ImageSerializer(serializers.ModelSerializer):
     """Serializer for images"""
+
     class Meta:
         model = Image
-        fields = ('id', 'file', 'label')
+        fields = ('file', 'label')
 
 
 class DrawingSerializer(serializers.ModelSerializer):
     """Serializer for drawings"""
+
     class Meta:
         model = Drawing
-        fields = ('id', 'file', 'label')
+        fields = ('file', 'label')
 
 
 class TechniqueSerializer(serializers.ModelSerializer):
@@ -52,6 +62,7 @@ class BillOfMaterialSerializer(serializers.ModelSerializer):
 class ProductDesignSerializer(serializers.ModelSerializer):
     """Serializer for product design model"""
 
+    dimensions = DimensionSerializer(many=True)
     images = ImageSerializer(many=True)
     drawings = DrawingSerializer(many=True)
     bill_of_materials = BillOfMaterialSerializer(
@@ -61,7 +72,7 @@ class ProductDesignSerializer(serializers.ModelSerializer):
     class Meta:
         model = ProductDesign
         fields = ('sku', 'name', 'collection', 'category', 'year', 'variance',
-                  'color', 'size', 'shape', 'images', 'drawings',
+                  'color', 'size', 'shape', 'dimensions', 'images', 'drawings',
                   'bill_of_materials', 'designers', 'date_created',
                   'date_modified', 'created_by', 'modified_by')
 
