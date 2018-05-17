@@ -25,6 +25,15 @@ urlpatterns = [
     re_path(r'^docs/$', SCHEMA_VIEW),
     re_path(r'^products/', include(('apps.products.api.urls', 'products-api'),
                                    namespace='products-api')),
+    re_path(r'^purchases/', include(('apps.purchases.api.urls',
+                                     'purchases-api'),
+                                    namespace='purchases-api')),
+    re_path(r'^validations/', include(('apps.validations.api.urls',
+                                       'validations-api'),
+                                      namespace='validations-api')),
+    re_path(r'^inventory/', include(('apps.inventory.api.urls',
+                                     'inventory-api'),
+                                    namespace='inventory-api')),
     re_path('admin/', admin.site.urls),
     # url(r'^api-auth/', include('rest_framework.urls'))
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
