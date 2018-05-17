@@ -68,6 +68,8 @@ class ProductDesignSerializer(serializers.ModelSerializer):
     bill_of_materials = BillOfMaterialSerializer(
         source='billofmaterial_set', many=True)
     designers = UserSerializer(many=True, read_only=True)
+    created_by = UserSerializer()
+    modified_by = UserSerializer()
 
     class Meta:
         model = ProductDesign
