@@ -95,7 +95,8 @@ class Image(models.Model):
 
 class Dimension(models.Model):
     """Product design dimensions and specifications"""
-    product = models.ForeignKey(ProductDesign, on_delete=models.CASCADE)
+    product = models.ForeignKey(
+        ProductDesign, related_name='dimensions', on_delete=models.CASCADE)
     attribute = models.CharField(blank=True, max_length=160)
     measurement = models.CharField(max_length=160, blank=True)
 
