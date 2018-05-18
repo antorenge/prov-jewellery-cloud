@@ -6,7 +6,7 @@ from django.urls import include, re_path
 from apps.inventory.api import views
 
 router = routers.DefaultRouter()
-router.register(r'inventory', views.InventoryItemView)
+router.register(r'inventory-items', views.InventoryItemView)
 
 app_name = "inventory"
 
