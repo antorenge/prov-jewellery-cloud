@@ -4,7 +4,7 @@ Inventory serializers
 from rest_framework import serializers
 from apps.products.api.serializers import ProductDesignSerializer
 from apps.purchases.api.serializers import PurchaseOrderDelivery
-from apps.validations.api.serializers import WorkInProgressSerializer
+from apps.validations.api.wip_serializer import WorkInProgressSerializer
 from ..models import InventoryItem
 
 

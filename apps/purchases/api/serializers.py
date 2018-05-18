@@ -6,7 +6,8 @@ from apps.users.api.serializers import UserSerializer
 from apps.products.api.serializers import (MaterialSerializer,
                                            ProductDesignSerializer)
 from ..models import (ArtisanProduction, Supplier, Location,
-                      PurchaseOrderProduct, PurchaseOrderDelivery)
+                      PurchaseOrderProduct, PurchaseOrderDelivery,
+                      Workshop)
 
 
 class PurchaseOrderProductSerializer(serializers.ModelSerializer):
@@ -66,3 +67,11 @@ class ArtisanProductionSerializer(serializers.ModelSerializer):
         fields = ('po_product', 'quantity_produced', 'date_created',
                   'date_modified', 'created_by', 'modified_by', 'location',
                   'suppliers')
+
+
+class WorkshopSerializer(serializers.ModelSerializer):
+    """Serializer for workshops"""
+
+    class Meta:
+        model = Workshop
+        fields = ('name', 'address')

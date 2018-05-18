@@ -1,26 +1,18 @@
 """
-Validations API
+WIP serializer
 """
 from rest_framework import serializers
 from apps.users.api.serializers import UserSerializer
-from apps.products.api.serializers import MaterialSerializer
-from ..models import Validation, WorkInProgress
-
-
-class ValidationSerializer(serializers.ModelSerializer):
-    """Serializer for validations"""
-
-    validated_by = UserSerializer()
-
-    class Meta:
-        model = Validation
-        fields = ('item', 'is_approved', 'date_validated', 'validated_by',
-                  'stage')
+from apps.products.api.serializers import ProductDesignSerializer
+from apps.purchases.api.serializers import WorkshopSerializer
+from ..models import WorkInProgress
 
 
 class WorkInProgressSerializer(serializers.ModelSerializer):
     """Serializer for wip's"""
 
+    product = ProductDesignSerializer()
+    workshop = WorkshopSerializer()
     received_from = UserSerializer()
     delivered_to = UserSerializer()
     created_by = UserSerializer()

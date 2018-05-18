@@ -3,7 +3,8 @@ Validations API views
 """
 from rest_framework import viewsets
 from ..models import Validation, WorkInProgress
-from .serializers import ValidationSerializer, WorkInProgressSerializer
+from .validation_serializer import ValidationSerializer
+from .wip_serializer import WorkInProgressSerializer
 
 
 class ValidationView(viewsets.ModelViewSet):
