@@ -5,7 +5,7 @@ from rest_framework import serializers
 from apps.users.api.serializers import UserSerializer
 from apps.products.api.serializers import (MaterialSerializer,
                                            ProductDesignSerializer)
-from ..models import (ArtisanProduction, Supplier, Location,
+from ..models import (ArtisanProduction, Supplier, Location, PurchaseOrder,
                       PurchaseOrderProduct, PurchaseOrderDelivery,
                       Workshop)
 
@@ -32,6 +32,28 @@ class PurchaseOrderDeliverySerializer(serializers.ModelSerializer):
         fields = ('po_product', 'quantity_delivered', 'quantity_received',
                   'date_delivered', 'date_received', 'delivered_by',
                   'received_by')
+
+
+class WorkshopSerializer(serializers.ModelSerializer):
+    """Serializer for workshops"""
+
+    class Meta:
+        model = Workshop
+        fields = ('name', 'address')
+
+
+class PurchaseOrderSerializer(serializers.ModelSerializer):
+    """Serializer for purchase orders"""
+
+    workshop = WorkshopSerializer()
+    products = PurchaseOrderProductSerializer(
+        source='purchaseorderproduct_set', many=True)
+    artisans = UserSerializer(many=True, read_only=True)
+
+    class Meta:
+        model = PurchaseOrder
+        fields = ('code', 'name', 'workshop', 'products', 'date_created',
+                  'due_date', 'artisans')
 
 
 class LocationSerializer(serializers.ModelSerializer):
@@ -67,11 +89,3 @@ class ArtisanProductionSerializer(serializers.ModelSerializer):
         fields = ('po_product', 'quantity_produced', 'date_created',
                   'date_modified', 'created_by', 'modified_by', 'location',
                   'suppliers')
-
-
-class WorkshopSerializer(serializers.ModelSerializer):
-    """Serializer for workshops"""
-
-    class Meta:
-        model = Workshop
-        fields = ('name', 'address')

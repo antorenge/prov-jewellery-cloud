@@ -34,6 +34,9 @@ urlpatterns = [
     re_path(r'^inventory/', include(('apps.inventory.api.urls',
                                      'inventory-api'),
                                     namespace='inventory-api')),
+    re_path(r'^payments/', include(('apps.payments.api.urls',
+                                    'payments-api'),
+                                   namespace='payments-api')),
     re_path('admin/', admin.site.urls),
     # url(r'^api-auth/', include('rest_framework.urls'))
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
