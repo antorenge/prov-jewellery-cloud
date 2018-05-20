@@ -16,7 +16,7 @@ class Validation(models.Model):
         ('artisan_production', 'Artisan Production'),
         ('in_house_wip', 'In-house WIP'),
     )
-    item = models.OneToOneField(InventoryItem, on_delete=models.PROTECT)
+    item = models.ForeignKey(InventoryItem, on_delete=models.PROTECT)
     is_approved = models.BooleanField(default=False)
     date_validated = models.DateTimeField(auto_now=True)
     validated_by = models.ForeignKey(
