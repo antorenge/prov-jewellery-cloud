@@ -13,5 +13,8 @@ app_name = "validations"
 
 urlpatterns = [
     re_path(r'^', include(router.urls)),
+    re_path(r'^qa-validations/(?P<id>.+)/signed$',
+            views.SignedValidationView.as_view(),
+            name='signed_validation_view'),
 
 ]
