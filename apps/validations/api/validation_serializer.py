@@ -15,5 +15,5 @@ class ValidationSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Validation
-        fields = ('item', 'is_approved', 'date_validated', 'validated_by',
-                  'stage')
+        fields = ('id', 'item', 'is_approved', 'date_validated',
+                  'validated_by', 'stage')
