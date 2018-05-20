@@ -59,6 +59,32 @@ class BillOfMaterialSerializer(serializers.ModelSerializer):
         fields = ('material', 'quantity')
 
 
+class MiniProductDesignSerializer(serializers.ModelSerializer):
+    """Mini serializer for product design model"""
+
+    dimensions = DimensionSerializer(many=True)
+    images = ImageSerializer(many=True)
+    drawings = DrawingSerializer(many=True)
+    bill_of_materials = BillOfMaterialSerializer(
+        source='billofmaterial_set', many=True)
+    designers = UserSerializer(many=True, read_only=True)
+
+    class Meta:
+        model = ProductDesign
+        fields = ('sku', 'name', 'collection', 'category', 'year', 'variance',
+                  'color', 'size', 'shape', 'dimensions', 'images', 'drawings',
+                  'bill_of_materials', 'designers')
+
+
+class ComponentSerializer(serializers.ModelSerializer):
+    """Serializer for Component model"""
+    child = MiniProductDesignSerializer()
+
+    class Meta:
+        model = Component
+        fields = ('child', 'quantity')
+
+
 class ProductDesignSerializer(serializers.ModelSerializer):
     """Serializer for product design model"""
 
@@ -67,6 +93,7 @@ class ProductDesignSerializer(serializers.ModelSerializer):
     drawings = DrawingSerializer(many=True)
     bill_of_materials = BillOfMaterialSerializer(
         source='billofmaterial_set', many=True)
+    components = ComponentSerializer(source='parent_product', many=True)
     designers = UserSerializer(many=True, read_only=True)
     created_by = UserSerializer()
     modified_by = UserSerializer()
@@ -75,8 +102,8 @@ class ProductDesignSerializer(serializers.ModelSerializer):
         model = ProductDesign
         fields = ('sku', 'name', 'collection', 'category', 'year', 'variance',
                   'color', 'size', 'shape', 'dimensions', 'images', 'drawings',
-                  'bill_of_materials', 'designers', 'date_created',
-                  'date_modified', 'created_by', 'modified_by')
+                  'bill_of_materials', 'designers', 'components',
+                  'date_created', 'date_modified', 'created_by', 'modified_by')
 
     def create(self, validated_data):
         product_design = ProductDesign.objects.create(**validated_data)
@@ -97,16 +124,6 @@ class ProductDesignSerializer(serializers.ModelSerializer):
                 product=product_design, **bill_of_material_data)
 
         return product_design
-
-
-class ComponentSerializer(serializers.ModelSerializer):
-    """Serializer for Component model"""
-    parent = ProductDesignSerializer()
-    child = ProductDesignSerializer()
-
-    class Meta:
-        model = Component
-        fields = "__all__"
 
 
 class ValidateSerializer(serializers.Serializer):
