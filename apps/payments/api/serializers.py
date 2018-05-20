@@ -16,10 +16,10 @@ class OwnershipTransferSerializer(serializers.ModelSerializer):
     current_owner = UserSerializer()
     created_by = UserSerializer()
     modified_by = UserSerializer()
-    items = InventoryItemSerializer()
+    items = InventoryItemSerializer(many=True)
 
     class Meta:
         model = OwnershipTransfer
-        fields = ('order', 'previous_owner', 'current_owner', 'items',
+        fields = ('id', 'order', 'previous_owner', 'current_owner', 'items',
                   'date_transferred', 'date_created', 'date_modified',
                   'created_by', 'modified_by')

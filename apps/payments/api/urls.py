@@ -12,5 +12,8 @@ app_name = "payments"
 
 urlpatterns = [
     re_path(r'^', include(router.urls)),
+    re_path(r'^transfers/(?P<id>.+)/signed$',
+            views.SignedTransferView.as_view(),
+            name='signed_transfer_view'),
 
 ]
