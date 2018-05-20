@@ -20,7 +20,7 @@ class WorkInProgressSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = WorkInProgress
-        fields = ('product', 'workshop', 'process', 'received_items',
+        fields = ('id', 'product', 'workshop', 'process', 'received_items',
                   'quantity_received', 'date_received', 'received_from',
                   'delivered_items', 'quantity_delivered', 'date_delivered',
                   'delivered_to', 'date_created', 'date_modified',

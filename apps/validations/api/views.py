@@ -22,12 +22,26 @@ class WorkInProgressView(viewsets.ModelViewSet):
 
 
 class SignedValidationView(generics.RetrieveAPIView):
-    """Return digitally signed purchase order delivery"""
+    """Return digitally signed validation"""
     queryset = Validation.objects.all()
     serializer_class = ValidationSerializer
 
     def get_object(self, id):
         return Validation.objects.filter(pk=id).first()
+
+    def get(self, request, id):
+        serializer = self.get_serializer(self.get_object(id))
+        encoded = jwt.encode(serializer.data, 'SECRET', algorithm='HS256')
+        return Response({'id': id, 'signed': encoded})
+
+
+class SignedWipView(generics.RetrieveAPIView):
+    """Return digitally signed work in progress"""
+    queryset = WorkInProgress.objects.all()
+    serializer_class = WorkInProgressSerializer
+
+    def get_object(self, id):
+        return WorkInProgress.objects.filter(pk=id).first()
 
     def get(self, request, id):
         serializer = self.get_serializer(self.get_object(id))

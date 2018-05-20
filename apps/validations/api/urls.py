@@ -16,5 +16,8 @@ urlpatterns = [
     re_path(r'^qa-validations/(?P<id>.+)/signed$',
             views.SignedValidationView.as_view(),
             name='signed_validation_view'),
+    re_path(r'^wips/(?P<id>.+)/signed$',
+            views.SignedWipView.as_view(),
+            name='signed_wip_view'),
 
 ]
