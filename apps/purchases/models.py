@@ -24,7 +24,6 @@ class PurchaseOrder(models.Model):
         ProductDesign, through='PurchaseOrderProduct')
     date_created = models.DateTimeField(auto_now=False, auto_now_add=True)
     due_date = models.DateTimeField()
-    artisans = models.ManyToManyField(User)
 
     def __str__(self):
         return "{} ({})".format(self.name, self.code)
@@ -127,6 +126,7 @@ class Workshop(models.Model):
     """Workshop model"""
     name = models.CharField(max_length=160, blank=True)
     address = models.TextField(blank=True)
+    artisans = models.ManyToManyField(User)
 
     def __str__(self):
         return "{}".format(self.name)
