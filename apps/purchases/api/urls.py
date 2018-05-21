@@ -15,5 +15,7 @@ urlpatterns = [
     re_path(r'^', include(router.urls)),
     re_path(r'^deliveries/(?P<id>.+)/signed$',
             views.SignedDeliveryView.as_view(), name='signed_delivery_view'),
+    re_path(r'^validate$',
+            views.ValidateSignedView.as_view(), name='validate_signed_view'),
 
 ]

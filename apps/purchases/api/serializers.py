@@ -103,3 +103,9 @@ class ArtisanProductionSerializer(serializers.ModelSerializer):
         fields = ('po_product', 'quantity_produced', 'date_created',
                   'date_modified', 'created_by', 'modified_by', 'location',
                   'suppliers')
+
+
+class ValidateSerializer(serializers.Serializer):
+    """Validate JSON web tokens serializer"""
+    id = serializers.CharField(max_length=200)
+    signed = serializers.CharField()
