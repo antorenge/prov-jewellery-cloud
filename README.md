@@ -9,9 +9,12 @@ These instructions will get you a copy of the project up and running on your loc
 ### Prerequisites
 
 * python 3.6
-* virtualenv
-* pip
-* MySQL database
+* [virtualenv](https://virtualenv.pypa.io/en/stable/)
+* [virtualenvwrapper](https://virtualenvwrapper.readthedocs.io/en/latest/install.html)
+* pip3
+* MySQL or any database
+* [MySQL client](https://github.com/PyMySQL/mysqlclient-python) or any database client connector
+
 
 ### Installing
 
@@ -21,7 +24,7 @@ To install packages
 pip install -r requirements.txt
 ```
 
-Create a *.env* file on the root directory and pre-fill these variables
+Create a *.env* file on the root directory and pre-fill these variables. Secret key can be any hashed value.
 
 ```{shell}
 SECRET_KEY=''
@@ -35,8 +38,8 @@ DATABASE_PASSWORD=''
 Then, inside your virtualenv make migrations and migrate
 
 ```{shell}
-> python manage.py makemigrations
-> python manage.py migrate
+python manage.py makemigrations
+python manage.py migrate
 ```
 
 Once this is done, you can run the application
